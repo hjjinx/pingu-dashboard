@@ -24,7 +24,7 @@ const StakingContract = new web3.eth.Contract(StakingABI, StakingContractAdd);
 const StakingStoreContractAdd = '0x91f24d2dc94b07954042b0e366b400ea527febf4';
 const StakingStoreContract = new web3.eth.Contract(StakingStoreABI, StakingStoreContractAdd);
 
-const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.0.3'
+const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.0.4'
 // const GRAPH = `https://gateway-arbitrum.network.thegraph.com/api/${PUBLIC_GRAPH_KEY}/subgraphs/id/ASonuQLUtjM7UPVyjGh5erZtBByBY2UDFiTBUnoUpmU4`
 
 export const getPositions = async () => {
