@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import Modal from "./Modal.svelte";
   import domtoimage from "dom-to-image";
-  import { SPINNER_ICON, DOWNLOAD_ICON, CAP_LOGO } from "../../../scripts/icons";
+  import { SPINNER_ICON, DOWNLOAD_ICON } from "../../../scripts/icons";
   import { getUPL, formatPnl, numberWithCommas, priceFormatter, getPriceDenominator } from "../../../scripts/utils";
   import { prices } from "../../../scripts/stores";
   import rocket from '../../../images/rocket.jpg';
@@ -12,6 +12,7 @@
   import milady_5 from '../../../images/milady5.png';
   import chud_1 from '../../../images/chud1.jpg';
   import remilio1 from '../../../images/remilio.png';
+  import Logo from "../../../images/logo.png";
 
   export let data: any;
   let imageData: any;
@@ -88,9 +89,9 @@
         <div class='bg-container'>
           <img src={chud_1} class='bg' alt='' id='banner-bg'/>
         </div>
-        <div class="cap-logo">
-          {@html CAP_LOGO}
-          <span class="cap-logo-text">cap.io</span>
+        <div class="logo">
+          <img src={Logo}/>
+          <span class="logo-text">pingu.exchange</span>
         </div>
         <div class="position-container">
           <p class="white-large">
@@ -207,12 +208,12 @@
     justify-content: space-between;
     margin-right: -150px;
   }
-  .cap-logo {
+  .logo {
     display: flex;
     flex-direction: row;
     height: 50px;
   }
-  .cap-logo-text {
+  .logo-text {
     margin-left: 20px;
     color: var(--primary);
     font-size: 48px;

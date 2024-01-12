@@ -1,10 +1,11 @@
 <script>
+  import Logo from "../../images/logo.png";
 </script>
 
 <header>
   <div class="inner">
     <div class="left">
-      <a class="logo" href="/#"> <h1>🧢</h1> </a>
+      <a class="logo" href="/#"> <img src={Logo} class='logo-img'> </a>
       <a class={"link"} href="#/positions">Positions</a>
       <a class={"link"} href="#/leaderboard">Leaderboard</a>
       <a class={"link"} href="#/staking">Staking</a>
@@ -44,6 +45,10 @@
 
   .logo {
     margin-right: 26px;
+    display: flex;
+  }
+  .logo-img {
+    height: 30px;
   }
 
   @media (max-width: 600px) {
