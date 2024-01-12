@@ -14,7 +14,7 @@
     changeSort('market')
     sortBy = 'market'
   });
-  
+
   $: changeSort = (_sortBy: string) => {
     if (sortBy == _sortBy) {
       sortOrder = sortOrder == 'desc' ? 'asc' : 'desc';
@@ -146,7 +146,7 @@
               "Opening Price":
                 "$" + +(position.price / getPriceDenominator(ETH)).toFixed(2),
               "Liquidation Price": "$" + +position.liquidationPrice.toFixed(2),
-              "Mark Price": "$" + +$prices[position.market][0].toFixed(2),
+              "Mark Price": "$" + +parseFloat($prices[position.market][0]).toFixed(2),
               "Price move for liquidation": `${position.isLong ? "-" : ""}${(
                 (position.isLong ? -1 : 1) *
                 +(

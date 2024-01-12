@@ -23,7 +23,6 @@
   let yTicks: any[] = [];
   let ma7: any[] = [];
   let maxCumY: any = 0;
-  console.log(data)
   onMount(async () => {
     ETHPrice = $prices["ETH-USD"][0];
     pointsCum.push({ x: 1676937513600, yPool: 0, yPoolETH: 0, yPoolUSD: 0, yStaking: 0, yStakingETH: 0, yStakingUSD: 0, yKeeper: 0, yKeeperETH: 0, yKeeperUSD: 0, yTreasury: 0, yTreasuryETH: 0, yTreasuryUSD: 0, yETH: 0, yUSD: 0, y: 0 });
@@ -100,15 +99,15 @@
       .range([height - padding.bottom, padding.top])
       .nice()
       .ticks(6);
-    let ma6 = 0;
-    for (let i = 1; i <= 6; i++) {
-      ma6 += points[i].y;
-    }
-    ma7.push((points[0].y + ma6) / 7);
-    ma7.push((ma6 + points[7].y) / 7);
-    for (let i = 7; i < points.length - 1; i++) {
-      ma7.push((ma7[i - 6] * 7 - points[i - 6].y + points[i + 1].y) / 7);
-    }
+    // let ma6 = 0;
+    // for (let i = 1; i <= 6; i++) {
+    //   ma6 += points[i].y;
+    // }
+    // ma7.push((points[0].y + ma6) / 7);
+    // ma7.push((ma6 + points[7].y) / 7);
+    // for (let i = 7; i < points.length - 1; i++) {
+    //   ma7.push((ma7[i - 6] * 7 - points[i - 6].y + points[i + 1].y) / 7);
+    // }
     loading = false;
     pointsCum = JSON.parse(JSON.stringify(pointsCum))
   });
@@ -140,7 +139,6 @@
   $: date = "";
 
   $: pointDataToDisplay = barHover || xHover || pointsCum[pointsCum.length - 1];
-  console.log(pointDataToDisplay)
 </script>
 
 {#if loading}
@@ -230,7 +228,6 @@
         if (index > points.length + 1) index = null
         else if (index < -1) index = null
         xHover = pointsCum[index]
-        console.log(xHover)
       }}
       on:mouseleave={() => {
         xHover = null;
@@ -321,7 +318,7 @@
           {/each}
         </g> -->
         <g class="cum-line">
-          {#each pointsCum as point, i}
+          {#each new Array(pointsCum.length - 1) as point, i}
             <line
               class="cum-line"
               class:transparent={!xHover || barHover}

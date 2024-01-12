@@ -11,10 +11,10 @@
 
   const intervals: any[] = []
   onMount(async () => {
-    await getPrices()
+    await getPrices('all')
     loading = false
     intervals.push(setInterval(() => {
-      getPrices()
+      getPrices('all')
     }, 10000))
     loadRoute(location.hash);
     window.onpopstate = () => loadRoute(location.hash);

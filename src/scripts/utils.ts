@@ -1,4 +1,5 @@
 import {
+  BASE_FEES_BPS,
   ETH,
   ETH_PRICE_DENOMINATOR,
   USDC,
@@ -10,6 +11,7 @@ import Positions from '../routes/Positions.svelte';
 import User from '../routes/User.svelte';
 import Leaderboard from '../routes/Leaderboard.svelte';
 import Staking from "../routes/Staking.svelte";
+import { get } from "svelte/store";
 
 export function numberWithCommas(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -72,7 +74,6 @@ export const addDollarInfoToData = (_positions: any[], prices: any[]) => {
   const newData = []
   for (const position of _positions) {
     const newPos = {...position}
-    console.log(newPos)
     newPos.leverage = newPos.size / newPos.margin;
     newPos.markPrice = prices[newPos.market][0];
     newPos.marginInDollars =
@@ -88,15 +89,151 @@ export const addDollarInfoToData = (_positions: any[], prices: any[]) => {
   return newData;
 }
 
-export async function getPrices() {
-  try {
-    const _prices = await fetch(`https://data.cap.io/api/price/all`).then(
-      (res) => res.json()
-    );
-    prices.set(_prices);
-  } catch (error) {
-    console.log(error);
-  }
+async function fetchMarketData(market: string): Promise<any> {
+	const params = {
+			market: market,
+			resolution: "86400",
+			end: Math.floor(Date.now() / 1000)
+	};
+
+	return fetchCandlesFromPyth(params, true);
+}
+
+const getMarket = async (m: string) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ohlcData = get(prices);
+      const marketDataExists = ohlcData[m as any];
+    
+      if (!marketDataExists) {
+        let data = await fetchMarketData(m);
+          if (Array.isArray(data)) {
+              data = data[0];
+          }
+          prices.update(x => ({ ...x, [m]: data }));
+          resolve(data)
+      }
+    } catch(err) {
+      reject(err)
+    }
+  })
+}
+
+export async function getPrices(market: string, currentUrl=window.location.href) {
+	if (!market) return;
+
+	try {
+			let marketData: any;
+
+			if (market === 'all') {
+          var markets = Object.keys(BASE_FEES_BPS);
+          await Promise.all(markets.map(getMarket));
+			} else {
+					marketData = await fetchMarketData(market);
+					prices.update(x => ({ ...x, [market]: marketData }));
+			}
+
+			return marketData;
+	} catch (error) {
+			console.error('/ticker GET error', market, error);
+	}
+}
+
+
+function getMarketType(symbol: string) {
+	const cryptoSymbols = new Set([
+		'1INCH', 'AAVE', 'ACM', 'ADA', 'AKT', 'ALGO', 'ALICE', 'ALPACA', 'ALPINE', 'AMB', 'AMP', 'ANC', 'ANKR', 'APE', 'APT', 'AR', 'ARB', 'ARG', 'ARKM', 'ASR', 'ASTR', 'ATLAS', 'ATM', 'ATOM', 'AURORA', 'AUTO', 'AVAX', 'AXL', 'AXS', 'BAL', 'BAND', 'BAR', 'BAT', 'BCH', 'BETH', 'BIFI', 'BLUR', 'BNB', 'BNX', 'BOBA', 'BONK', 'BOO', 'BRZ', 'BSOL', 'BSV', 'BSW', 'BTC', 'BTT', 'BUSD', 'C98', 'CAKE', 'CANTO', 'CBETH', 'CEL', 'CELO', 'CELR', 'CETUS', 'CFX', 'CHR', 'CHZ', 'CITY', 'COMP', 'CORE', 'COW', 'CRO', 'CRV', 'CTSI', 'CUSD', 'CVX', 'DAI', 'DAR', 'DOGE', 'DOT', 'DYDX', 'EGLD', 'ENJ', 'ENS', 'EOS', 'ETC', 'ETH', 'EURC', 'EVMOS', 'FDUSD', 'FET', 'FIDA', 'FIL', 'FLOKI', 'FLOW', 'FTM', 'FTT', 'FXS', 'GAL', 'GALA', 'GF', 'GLMR', 'GMT', 'GMX', 'GNO', 'GNS', 'GRAIL', 'GRT', 'GT', 'GUSD', 'HBAR', 'HFT', 'HNT', 'HT', 'ICP', 'IDEX', 'IMX', 'INJ', 'INTER', 'IOTA', 'ITA', 'JITOSOL', 'JST', 'JTO', 'JUV', 'KAVA', 'KCS', 'KLAY', 'KNC', 'KSM', 'LAZIO', 'LDO', 'LEO', 'LINK', 'LRC', 'LST', 'LTC', 'LUNA', 'LUNC', 'LUSD', 'MANA', 'MASK', 'MATIC', 'MAV', 'MBOX', 'MEAN', 'MEME', 'MINA', 'MIR', 'MKR', 'MNDE', 'MNGO', 'MNT', 'MSOL', 'MTR', 'MTRG', 'NEAR', 'NEON', 'NFT', 'NTRN', 'OG', 'OKB', 'OMG', 'OMI', 'ONE', 'OP', 'ORCA', 'ORDI', 'OSMO', 'OUSD', 'PAXG', 'PENDLE', 'PEOPLE', 'PEPE', 'PERP', 'POL', 'POR', 'PORT', 'PORTO', 'PRIME', 'PSG', 'PYTH', 'PYUSD', 'QNT', 'RACA', 'RAY', 'RDNT', 'RETH', 'RLB', 'RNDR', 'RON', 'RPL', 'RUNE', 'SAMO', 'SAND', 'SANTOS', 'SBR', 'SCNSOL', 'SEI', 'SFP', 'SHIB', 'SKL', 'SLND', 'SLP', 'SMR', 'SNX', 'SNY', 'SOL', 'SPA', 'SPELL', 'SRM', 'STETH', 'STORJ', 'STSOL', 'STX', 'SUI', 'SUN', 'SUSHI', 'SWEAT', 'TBTC', 'TENET', 'THETA', 'THG', 'TIA', 'TLM', 'TON', 'TRB', 'TRX', 'TURBOS', 'TUSD', 'TWT', 'UMA', 'UNI', 'UNIBOT', 'USDC', 'USDD', 'USDP', 'USDT', 'USTC', 'VAI', 'VELA', 'VET', 'VIC', 'WAVES', 'WBTC', 'WEMIX', 'WIN', 'WLD', 'WOJAK', 'WOM', 'WOO', 'WSTETH', 'XAUT', 'XLM', 'XMR', 'XPRT', 'XRD', 'XRP', 'XTZ', 'XVS', 'XWG', 'YFI', 'ZBC', 'ZEC', 'ZEN', 'ZIL', 'ZRX'
+	]);
+
+	const equitySymbols = new Set([
+		'AAPL', 'AI', 'AMC', 'AMGN', 'AMZN', 'ARKK', 'AXP', 'BA', 'BLK', 'CAT', 'COIN', 'CPNG', 'CRM', 'CSCO', 'CVX', 'DIS', 'DOW', 'EEM', 'EFA', 'GE', 'GLD', 'GME', 'GOOG', 'GOVT', 'GS', 'HD', 'HON', 'HYG', 'IBM', 'INTC', 'IVV', 'IWM', 'JNJ', 'JPM', 'KO', 'MCD', 'META', 'MINT', 'MMM', 'MRK', 'MSFT', 'MSTR', 'NFLX', 'NKE', 'NVDA', 'PG', 'QQQ', 'SHV', 'SPY', 'TLT', 'TRV', 'TSLA', 'UNH', 'USO', 'V', 'VOO', 'VZ', 'WBA', 'WMT', 'XLE'
+	]);
+
+	const fxSymbols = new Set([
+		'AUD', 'EUR', 'GBP', 'NZD', 'CAD', 'CHF', 'CNH', 'HKD', 'JPY', 'MXN', 'NOK', 'SEK', 'SGD', 'ZAR'
+	]);
+
+	const metalSymbols = new Set(['XAG', 'XAU']);
+
+	// Extraire le symbole de base (avant le "/")
+	var baseSymbol = symbol.split('-')[0];
+
+
+    // Determine the market type based on the base symbol
+    if (cryptoSymbols.has(baseSymbol)) {
+			return "Crypto";
+	} else if (equitySymbols.has(baseSymbol)) {
+			return "Equity.US";
+	} else if (fxSymbols.has(baseSymbol)) {
+			return "FX";
+	} else if (metalSymbols.has(baseSymbol)) {
+			return "Metal";
+	} else {
+			// If the first part of the symbol is unknown, check the second part
+			baseSymbol = symbol.split('-')[1];
+			if (cryptoSymbols.has(baseSymbol)) {
+					return "Crypto";
+			} else if (equitySymbols.has(baseSymbol)) {
+					return "Equity.US";
+			} else if (fxSymbols.has(baseSymbol)) {
+					return "FX";
+			} else if (metalSymbols.has(baseSymbol)) {
+					return "Metal";
+			} else {
+					return "Unknown"; // Or handle the error
+			}
+	}
+}
+
+
+async function fetchCandlesFromPyth(params: any, returnLastOnly = false) {
+	// Mise à jour de la carte de mappage de résolution
+	const resolutionMap: any = {
+			"60": "1",
+			"300": "5",
+			"900": "15",
+			"3600": "60",
+			"14400": "240",
+			"86400": "1D"
+	};
+	const pythResolution = resolutionMap[params.resolution.toString()] || params.resolution;
+
+	// Mappage de la résolution à l'intervalle de temps (en secondes)
+	const timeIntervalMap: any = {
+			"60": 86400,
+			"300": 2 * 86400,
+			"900": 6 * 86400,
+			"3600": 24 * 86400,
+			"14400": 96 * 86400,
+			"86400": 576 * 86400
+	};
+
+	var timeInterval = timeIntervalMap[params.resolution.toString()] || 86400;
+	var startTimestamp = params.end - timeInterval; // Soustraire l'intervalle en secondes du timestamp de fin
+	var endTimestamp = params.end || Math.floor(Date.now() / 1000); // Utiliser le timestamp de fin s'il est fourni
+
+	// Ajuster le timestamp de début pour obtenir le dernier ensemble de données si demandé
+	var startTimestamp = returnLastOnly ? endTimestamp - 86400 : endTimestamp - timeInterval;
+
+
+	var marketType = getMarketType(params.market);
+	//console.log('markettype', marketType);
+	var convertedSymbol = `${marketType}.${params.market.replace("-", "/")}`;
+	var pythSymbol = encodeURIComponent(convertedSymbol);
+
+	var pythEndpoint = `https://benchmarks.pyth.network/v1/shims/tradingview/history?symbol=${pythSymbol}&resolution=${pythResolution}&from=${startTimestamp}&to=${params.end}`;
+	//console.log("pythEndpoint", pythEndpoint);
+	var response = await fetch(pythEndpoint);
+	var pythData = await response.json();
+
+	let json = [];
+	if (pythData.s === "ok") {
+			for (let i = 0; i < pythData.t.length; i++) {
+					json.push([pythData.c[i].toString()]);
+			}
+	}
+
+	return json;
 }
 
 export const getPriceDenominator = (asset: string) =>

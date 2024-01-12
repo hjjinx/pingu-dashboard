@@ -3,7 +3,7 @@
   import { SPINNER_ICON } from '../../scripts/icons';
   import { onMount } from 'svelte';
   import { prices } from '../../scripts/stores';
-  import { ETH, USDC } from '../../scripts/constants';
+  import { ETH, USDC, startTimestamp } from '../../scripts/constants';
   import {
     numberWithCommas,
     timeConverter,
@@ -27,7 +27,7 @@
   let minCumY: any = 0;
   onMount(async () => {
     ETHPrice = $prices['ETH-USD'][0]
-    pointsCum.push({ x: 1676937513600, yETH: 0, yUSD: 0, y: 0 });
+    pointsCum.push({ x: startTimestamp, yETH: 0, yUSD: 0, y: 0 });
     for (let element of data) {
       points.push({ x: parseInt(element.id) });
       pointsCum.push({ x: parseInt(element.id) });
@@ -70,15 +70,15 @@
       );
     }
 
-    let ma6 = 0;
-    for (let i = 1; i <= 6; i++) {
-      ma6 += points[i].y;
-    }
-    ma7.push((points[0].y + ma6) / 7);
-    ma7.push((ma6 + points[7].y) / 7);
-    for (let i = 7; i < points.length - 1; i++) {
-      ma7.push((ma7[i - 6] * 7 - points[i - 6].y + points[i + 1].y) / 7);
-    }
+    // let ma6 = 0;
+    // for (let i = 1; i <= 6; i++) {
+    //   ma6 += points[i].y;
+    // }
+    // ma7.push((points[0].y + ma6) / 7);
+    // ma7.push((ma6 + points[7].y) / 7);
+    // for (let i = 7; i < points.length - 1; i++) {
+    //   ma7.push((ma7[i - 6] * 7 - points[i - 6].y + points[i + 1].y) / 7);
+    // }
     loading = false;
   });
 
@@ -227,7 +227,7 @@
         {/each}
       </g>
       <g class="cum-line">
-        {#each pointsCum as point, i}
+        {#each new Array(pointsCum.length - 1) as point, i}
           <line
             class="cum-line"
             class:transparent={!xHover || barHover}
