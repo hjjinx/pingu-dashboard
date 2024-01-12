@@ -69,9 +69,9 @@
       >
         Est. Liq. Price
       </div>
-      <div class='column column-liqprice'>
+      <!-- <div class='column column-liqprice'>
         Share
-      </div>
+      </div> -->
     {:else if dataType == 'orders'}
       <div class="column column-leverage" on:click={() => changeSort('leverage')}>
         Leverage <span class={sortOrder == 'asc' ? 'pos' : 'neg'}
@@ -113,9 +113,9 @@
         >{sortBy == 'type' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
       >
       </div>
-      <div class='column'>
+      <!-- <div class='column'>
         Share
-      </div>
+      </div> -->
     {/if}
     <div class="column column-close" />
   </div>
@@ -201,10 +201,9 @@
             <div class="column column-price" title={`${(position.liquidationPrice).toString()}$`}>
               {numberWithCommas(position.liquidationPrice.toFixed(2)) || '--'}$
             </div>
-            <div class="column column-liqprice" title={`Share`}>
-              <!-- svelte-ignore a11y-missing-attribute -->
+            <!-- <div class="column column-liqprice" title={`Share`}>
               <a on:click|stopPropagation={() => { sharePositionModal.set(position) }}>{@html SHARE_ICON}</a>
-            </div>
+            </div> -->
 
           {:else if dataType == 'orders'}
             <div class="column column-leverage">
@@ -252,15 +251,14 @@
             <div class="column column-liqprice">
               {position.type}
             </div>
-            <div class="column" title={`Share`}>
-              <!-- svelte-ignore a11y-missing-attribute -->
+            <!-- <div class="column" title={`Share`}>
                 <a 
                   class:hide={position.type != "Position Liquidated" && position.type != "Position Decreased"} 
                   on:click|stopPropagation={() => { sharePositionModal.set({...position, isClose: true}) }}
                 >
                   {@html SHARE_ICON}
                 </a>
-            </div>
+            </div> -->
           {/if}
         </div>
       {/each}
