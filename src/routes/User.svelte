@@ -126,7 +126,7 @@
       totalClaimedRevenue = Number((claimedRevenueEth * $prices['ETH-USD'][0] + claimedRevenueUsdc).toFixed(1))
       totalUnClaimedRevenue = Number((unClaimedRevenueEth * $prices['ETH-USD'][0] + unClaimedRevenueUsdc).toFixed(1))
       totalRevenue = Number((totalClaimedRevenue + totalUnClaimedRevenue).toFixed(1))
-      pinguStaked = Number(((userStats.pinguStaked / getPriceDenominator(ETH))).toFixed(1))
+      pinguStaked = Number(((userStats.capStaked / getPriceDenominator(ETH))).toFixed(1))
     }
 
     for (let row of history) {
