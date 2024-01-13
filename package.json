@@ -22,7 +22,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/dom-to-image": "^2.6.4",
-		"@vercel/analytics": "^1.0.0",
+		"@vercel/analytics": "^1.1.1",
 		"d3-scale": "^4.0.2",
 		"dom-to-image": "^2.6.0",
 		"moment": "^2.29.4",
