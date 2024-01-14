@@ -158,7 +158,7 @@
           >{numberWithCommas(Math.round(pointDataToDisplay.yPool))}</span
         > | Ξ:
         <span class="volumeETH"
-          >{numberWithCommas(Math.round(pointDataToDisplay.yPoolETH))}</span
+          >{numberWithCommas(pointDataToDisplay.yPoolETH.toFixed(2))}</span
         >
         | USDC:
         <span class="volumeUSDC"
@@ -171,7 +171,7 @@
           >{numberWithCommas(Math.round(pointDataToDisplay.yStaking))}</span
         > | Ξ:
         <span class="volumeETH"
-          >{numberWithCommas(Math.round(pointDataToDisplay.yStakingETH))}</span
+          >{numberWithCommas(pointDataToDisplay.yStakingETH.toFixed(2))}</span
         >
         | USDC:
         <span class="volumeUSDC"
@@ -184,7 +184,7 @@
           >{numberWithCommas(Math.round(pointDataToDisplay.yKeeper))}</span
         > | Ξ:
         <span class="volumeETH"
-          >{numberWithCommas(Math.round(pointDataToDisplay.yKeeperETH))}</span
+          >{numberWithCommas(pointDataToDisplay.yKeeperETH.toFixed(2))}</span
         >
         | USDC:
         <span class="volumeUSDC"
@@ -197,7 +197,7 @@
           >{numberWithCommas(Math.round(pointDataToDisplay.yTreasury))}</span
         > | Ξ:
         <span class="volumeETH"
-          >{numberWithCommas(Math.round(pointDataToDisplay.yTreasuryETH))}</span
+          >{numberWithCommas(pointDataToDisplay.yTreasuryETH.toFixed(2))}</span
         >
         | USDC:
         <span class="volumeUSDC"
@@ -210,7 +210,7 @@
           >{numberWithCommas(Math.round(pointDataToDisplay.y))}</span
         > | Ξ:
         <span class="volumeETH"
-          >{numberWithCommas(Math.round(pointDataToDisplay.yETH))}</span
+          >{numberWithCommas(pointDataToDisplay.yETH.toFixed(2))}</span
         >
         | USDC:
         <span class="volumeUSDC"
