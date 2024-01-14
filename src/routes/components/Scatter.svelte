@@ -190,7 +190,7 @@
               "Opening Price":
                 "$" + +(point.p.price / getPriceDenominator(ETH)).toFixed(2),
               "Liquidation Price": "$" + +point.p.liquidationPrice.toFixed(2),
-              "Mark Price": "$" + +$prices[point.p.market][0].toFixed(2),
+              "Mark Price": "$" + +parseFloat($prices[point.p.market][0]).toFixed(2),
               "Price move for liquidation": `${(
                 point.x * 100
               ).toFixed(2)}%`,
