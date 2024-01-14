@@ -19,7 +19,7 @@
     loading = false
     intervals.push(setInterval(() => {
       getPrices('all')
-    }, 10000))
+    }, 30000))
     loadRoute(location.hash);
     window.onpopstate = () => loadRoute(location.hash);
   });
