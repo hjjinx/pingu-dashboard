@@ -150,9 +150,9 @@
     cursor: pointer;
   }
   .column-product {
-    width: 20%;
+    width: 25%;
   }
   .column-claimed {
-    width: 20%;
+    width: 25%;
   }
 </style>
