@@ -9,6 +9,7 @@
       <a class={"link"} href="#/positions">Positions</a>
       <a class={"link"} href="#/leaderboard">Leaderboard</a>
       <a class={"link"} href="#/staking">Staking</a>
+      <a class={"link"} href="#/pooling">Pooling</a>
     </div>
   </div>
 </header>
@@ -35,7 +36,7 @@
     color: var(--silver-chalice);
     margin-right: 14px;
     font-weight: 500;
-    padding: 6px 12px;
+    padding: 6px 5px;
     border-radius: var(--base-radius);
   }
 

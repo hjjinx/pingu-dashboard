@@ -24,7 +24,7 @@ const StakingContract = new web3.eth.Contract(StakingABI, StakingContractAdd);
 const StakingStoreContractAdd = '0x91f24d2dc94b07954042b0e366b400ea527febf4';
 const StakingStoreContract = new web3.eth.Contract(StakingStoreABI, StakingStoreContractAdd);
 
-const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.0.4'
+const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.0.6'
 // const GRAPH = `https://gateway-arbitrum.network.thegraph.com/api/${PUBLIC_GRAPH_KEY}/subgraphs/id/ASonuQLUtjM7UPVyjGh5erZtBByBY2UDFiTBUnoUpmU4`
 
 export const getPositions = async () => {
@@ -355,4 +355,46 @@ export const getDaysData = async () => {
   }
   await call(skipped)
   return days;
+}
+
+export const getUserPoolStats = async () => {
+  let users: any[] = []
+  let skipped = 0
+  const call = async (skip: number) => {
+    let _users = await fetch(GRAPH, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+              users(
+                skip: ${skip}
+                first: 1000
+                orderBy: id
+                orderDirection: desc
+                subgraphError: deny
+                where: { or: [{ poolEthDeposited_gt: 0 }, { poolUsdcDeposited_gt: 0 }]}
+              ) {
+                id
+                poolEthDeposited
+                poolEthWithdrawn
+                poolEthTaxPaid
+                poolUsdcDeposited
+                poolUsdcWithdrawn
+                poolUsdcTaxPaid
+              }
+            }
+          `,
+      }),
+    }).then(res => res.json())
+    users.push(..._users?.data?.users)
+    if (_users?.data?.users?.length == 1000) {
+      skipped += 1000
+      await call(skipped)
+    }
+  }
+  await call(skipped)
+  return users;  
 }

@@ -11,6 +11,7 @@ import Positions from '../routes/Positions.svelte';
 import User from '../routes/User.svelte';
 import Leaderboard from '../routes/Leaderboard.svelte';
 import Staking from "../routes/Staking.svelte";
+import Pooling from "../routes/Pooling.svelte";
 import { get } from "svelte/store";
 
 export function numberWithCommas(x: number) {
@@ -298,6 +299,8 @@ export function loadRoute(path: string) {
     component.set(User);
   } else if (path.includes("/staking")) {
     component.set(Staking);
+  } else if (path.includes("/pooling")) {
+    component.set(Pooling);
   }
 }
 
