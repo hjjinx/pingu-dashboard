@@ -195,20 +195,18 @@
           </div>
         </div>
       </div>
-      <div class='first-trade-info'>
-        {#if firstTradeDate == null}
-          Has never traded on Pingu
+        {#if lastTradeDate == 0}
+          <div class='first-trade-info'>
+            Has never traded on Pingu
+          </div>
         {:else}
-          Started trading on Pingu on <span class="white">{firstTradeDate}</span>
+          <div class='first-trade-info'>
+            Started trading on Pingu on <span class="white">{firstTradeDate}</span>
+          </div>
+          <div class='last-trade-info'>
+              Last traded on Pingu on <span class="white">{lastTradeDate}</span>
+          </div>
         {/if}
-      </div>
-      <div class='last-trade-info'>
-        {#if firstTradeDate == null}
-          {''}
-        {:else}
-          Last traded on Pingu on <span class="white">{lastTradeDate}</span>
-        {/if}
-      </div>
       <div class='last-trade-info'>
         Has Staked <span class='green'>{pinguStaked} Pingu</span>
       </div>
