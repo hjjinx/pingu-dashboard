@@ -2,7 +2,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <script lang='ts'>
   import { onMount } from "svelte";
-  import { getUserHistory, getUserOpenOrders, getUserPositions, getUserStats, resolveEns, getUnclaimedStakingRewards } from '../scripts/web3';
+  import { getUserHistory, getUserOpenOrders, getUserPositions, getUserStats, resolveEns, getUnclaimedStakingRewards, getUserPooledAmount } from '../scripts/web3';
   import { ARBISCAN_ICON, DE_BANK_ICON, SPINNER_ICON } from "../scripts/icons";
   import DataComp from "./components/DataComp.svelte";
   import { prices } from "../scripts/stores";
@@ -60,6 +60,22 @@
   let totalUnClaimedRevenue: number = 0
   let totalRevenue: number = 0
   let pinguStaked: number = 0
+  let poolEthDeposited: number = 0
+  let poolEthWithdrawn: number = 0
+  let poolEthTaxPaid: number = 0
+  let poolUsdcDeposited: number = 0
+  let poolUsdcWithdrawn: number = 0
+  let poolUsdcTaxPaid: number = 0
+  let totalDeposited: number = 0
+  let totalWithdrawn: number = 0
+  let totalTaxPaid: number = 0
+  let userPooledEth: number = 0
+  let userPooledUsdc: number = 0
+  let userPooledTotal: number = 0
+  let ethPnl: number = 0
+  let usdcPnl: number = 0
+  let totalPnl: number = 0
+
   onMount(async () => {
     let url = window.location.href.split('/')
     user = url[url.length - 1]
@@ -80,17 +96,21 @@
       return;
     }
     user = user.toLocaleLowerCase();
-    [positions, orders, history, userStats, unclaimedRewards] = await Promise.all([
+    [positions, orders, history, userStats, unclaimedRewards, userPooledEth, userPooledUsdc] = await Promise.all([
       await getUserPositions(user),
       await getUserOpenOrders(user),
       await getUserHistory(user),
       await getUserStats(user),
-      await getUnclaimedStakingRewards(user)
+      await getUnclaimedStakingRewards(user),
+      await getUserPooledAmount(user, ETH),
+      await getUserPooledAmount(user, USDC),
     ])
     calculateUPLs(positions, $prices)
     orders = addDollarInfoToData(orders, $prices)
     history = addDollarInfoToData(history, $prices)
-
+    userPooledEth = Number(Number(userPooledEth / getPriceDenominator(ETH))).toFixed(2);
+    userPooledUsdc = Number(Number(userPooledUsdc / getPriceDenominator(USDC))).toFixed(2);
+    userPooledTotal = (Number((userPooledEth * $prices['ETH-USD'][0] + Number(userPooledUsdc))).toFixed(2));
     if (userStats) {
       grossPnlEth = Number((userStats.pnlEth / getPriceDenominator(ETH)).toFixed(3));
       grossPnlUsdc = Number((userStats.pnlUsdc / getPriceDenominator(USDC)).toFixed(1));
@@ -127,8 +147,20 @@
       totalUnClaimedRevenue = Number((unClaimedRevenueEth * $prices['ETH-USD'][0] + unClaimedRevenueUsdc).toFixed(1))
       totalRevenue = Number((totalClaimedRevenue + totalUnClaimedRevenue).toFixed(1))
       pinguStaked = Number(((userStats.capStaked / getPriceDenominator(ETH))).toFixed(1))
-    }
 
+      poolEthDeposited = Number((+userStats.poolEthDeposited / getPriceDenominator(ETH)).toFixed(3))
+      poolEthWithdrawn = Number((+userStats.poolEthWithdrawn / getPriceDenominator(ETH)).toFixed(3))
+      poolEthTaxPaid = Number((+userStats.poolEthTaxPaid / getPriceDenominator(ETH)).toFixed(3))
+      poolUsdcDeposited = Number((+userStats.poolUsdcDeposited / getPriceDenominator(USDC)).toFixed(2))
+      poolUsdcWithdrawn = Number((+userStats.poolUsdcWithdrawn / getPriceDenominator(USDC)).toFixed(2))
+      poolUsdcTaxPaid = Number((+userStats.poolUsdcTaxPaid / getPriceDenominator(USDC)).toFixed(2))
+      totalDeposited = Number((poolEthDeposited * $prices['ETH-USD'][0] + poolUsdcDeposited).toFixed(2));
+      totalWithdrawn = Number((poolEthWithdrawn * $prices['ETH-USD'][0] + poolUsdcWithdrawn).toFixed(2));
+      totalTaxPaid = Number((poolEthTaxPaid * $prices['ETH-USD'][0] + poolUsdcTaxPaid).toFixed(2));
+      ethPnl = Number((Number(poolEthWithdrawn) + Number(userPooledEth) - Number(poolEthDeposited) - Number(poolEthTaxPaid)).toFixed(2))
+      usdcPnl = Number((Number(poolUsdcWithdrawn) + Number(userPooledUsdc) - Number(poolUsdcDeposited) - Number(poolUsdcTaxPaid)).toFixed(2))
+      totalPnl = Number((Number(totalWithdrawn) + Number(userPooledTotal) - Number(totalDeposited) - Number(totalTaxPaid)).toFixed(2))
+    }
     for (let row of history) {
       if (row.blockTimestamp > lastTradeDate!) lastTradeDate = row.blockTimestamp
       if (row.blockTimestamp < firstTradeDate!) firstTradeDate = row.blockTimestamp
@@ -286,6 +318,37 @@
             </div>
             <span class:pos={totalRevenueEth > 0} class:neg={totalRevenueEth < 0}>Ξ{numberWithCommas(totalRevenueEth)}</span>
           </div>
+          <h3 class="heading"></h3>
+          <div class="data-row">
+            <div class="label">
+              Deposited
+            </div>
+            <span class='pos'>Ξ{numberWithCommas(poolEthDeposited)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Withdrawn
+            </div>
+            <span class='yellow'>Ξ{numberWithCommas(poolEthWithdrawn)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Current Share
+            </div>
+            <span class='yellow'>Ξ{numberWithCommas(userPooledEth)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Tax Paid
+            </div>
+            <span class='neg'>Ξ{numberWithCommas(poolEthTaxPaid)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Net PnL
+            </div>
+            <span class='neg'>Ξ{numberWithCommas(ethPnl)}</span>
+          </div>
         </div>
         <div class="stats">
           <div class={"eth head"}><img src={usdcSvg} class='coin-icon'/></div>
@@ -362,6 +425,37 @@
             </div>
             <span class:pos={totalRevenueUsdc > 0} class:neg={totalRevenueUsdc < 0}>${numberWithCommas(totalRevenueUsdc)}</span>
           </div>
+          <h3 class="heading"></h3>
+          <div class="data-row">
+            <div class="label">
+              Deposited
+            </div>
+            <span class='pos'>${numberWithCommas(poolUsdcDeposited)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Withdrawn
+            </div>
+            <span class='yellow'>${numberWithCommas(poolUsdcWithdrawn)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Current Share
+            </div>
+            <span class='yellow'>${numberWithCommas(userPooledUsdc)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Tax Paid
+            </div>
+            <span class='neg'>${numberWithCommas(poolUsdcTaxPaid)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Net PnL
+            </div>
+            <span class='neg'>${numberWithCommas(usdcPnl)}</span>
+          </div>
         </div>
         <div class="stats">
           <div class={"white head"}><img src={ethSvg} class='coin-icon'/> + <img src={usdcSvg} class='coin-icon'/></div>
@@ -437,6 +531,37 @@
               Total Reward
             </div>
             <span class:pos={totalRevenue > 0} class:neg={totalRevenue < 0}>${numberWithCommas(totalRevenue)}</span>
+          </div>
+          <h3 class="heading"></h3>
+          <div class="data-row">
+            <div class="label">
+              Deposited
+            </div>
+            <span class='pos'>${numberWithCommas(totalDeposited)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Withdrawn
+            </div>
+            <span class='yellow'>${numberWithCommas(totalWithdrawn)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Current Share
+            </div>
+            <span class='yellow'>${numberWithCommas(userPooledTotal)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Tax Paid
+            </div>
+            <span class='neg'>${numberWithCommas(totalTaxPaid)}</span>
+          </div>
+          <div class="data-row">
+            <div class="label">
+              Net PnL
+            </div>
+            <span class='neg'>${numberWithCommas(totalPnl)}</span>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import {
   OrderStore as OrderStoreABI,
   Staking as StakingABI,
   StakingStore as StakingStoreABI,
+  PoolStore as PoolStoreABI,
 } from './abis.js'
 import Web3 from 'web3'
 import { getPriceDenominator } from './utils.js';
@@ -23,6 +24,9 @@ const StakingContract = new web3.eth.Contract(StakingABI, StakingContractAdd);
 
 const StakingStoreContractAdd = '0x91f24d2dc94b07954042b0e366b400ea527febf4';
 const StakingStoreContract = new web3.eth.Contract(StakingStoreABI, StakingStoreContractAdd);
+
+const PoolStoreContractAdd = '0xe270e23dc782072de5c75744e0dcfb75372f2791';
+const PoolStoreContract = new web3.eth.Contract(PoolStoreABI, PoolStoreContractAdd);
 
 const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.0.6'
 // const GRAPH = `https://gateway-arbitrum.network.thegraph.com/api/${PUBLIC_GRAPH_KEY}/subgraphs/id/ASonuQLUtjM7UPVyjGh5erZtBByBY2UDFiTBUnoUpmU4`
@@ -94,6 +98,15 @@ export const getStakingFeeShare = async () => {
     }
   });
   return stakingFeeShare;
+}
+
+export const getUserPooledAmount = async (address: string, asset: string) => {
+  let userPooledAmount = await PoolStoreContract.methods.getUserBalance(asset, address).call((error: any) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  return userPooledAmount;
 }
 
 export const getUserHistory = async (address: string) => {
@@ -186,6 +199,12 @@ export const getUserStats = async (address: string) => {
                 stakingRevenueEth
                 stakingRevenueUsdc
                 capStaked
+                poolEthDeposited
+                poolEthWithdrawn
+                poolEthTaxPaid
+                poolUsdcDeposited
+                poolUsdcWithdrawn
+                poolUsdcTaxPaid
               }
             }
           `,
