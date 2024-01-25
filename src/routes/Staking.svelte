@@ -13,7 +13,7 @@
   let sortOrder = 'desc';
   $: totalPinguStaked = 0;
   $: volumePerDay = 50;
-  $: pinguStaked = 100;
+  $: pinguStaked = 100000;
   $: stakingFeeShare = 0;
   $: earningsPerDay = ((volumePerDay * 10**6) * 0.06 * 0.01 * (stakingFeeShare * 0.01 * 0.01) * (pinguStaked / totalPinguStaked)).toFixed(2);
   onMount(async () => {
@@ -56,7 +56,7 @@
   <div class='top-bar'>
     <div class='top-text'>
       Assuming a volume of $<input type='number' bind:value={volumePerDay} class='inline-input' min={0} max={999} style="width: 50px"> M /day 
-      and you staking <input type='number' bind:value={pinguStaked} class='inline-input' min={0} max={9999}> Pingu, 
+      and you staking <input type='number' bind:value={pinguStaked} class='inline-input pingu-staked' min={0} max={100000000} step={1000}> Pingu<br/>
       you will make ${numberWithCommas(+earningsPerDay)} /day (${numberWithCommas(+(+earningsPerDay * 365).toFixed(2))} /year).
     </div>
   </div>
@@ -191,6 +191,10 @@
     max-width: fit-content;
     padding: 0 0 0 5px;
     width: 60px;
+  }
+
+  .inline-input.pingu-staked {
+    width: 100px; 
   }
   input[type="number"] {
     /* Always display the up and down arrows */
