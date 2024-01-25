@@ -335,7 +335,7 @@
             <div class="label">
               Current Share
             </div>
-            <span class='yellow'>Ξ{numberWithCommas(userPooledEth)}</span>
+            <span class='white'>Ξ{numberWithCommas(userPooledEth)}</span>
           </div>
           <div class="data-row">
             <div class="label">
@@ -347,7 +347,7 @@
             <div class="label">
               Net PnL
             </div>
-            <span class='neg'>Ξ{numberWithCommas(ethPnl)}</span>
+            <span class:neg={ethPnl < 0} class:pos={ethPnl > 0}>Ξ{numberWithCommas(ethPnl)}</span>
           </div>
         </div>
         <div class="stats">
@@ -442,7 +442,7 @@
             <div class="label">
               Current Share
             </div>
-            <span class='yellow'>${numberWithCommas(userPooledUsdc)}</span>
+            <span class='white'>${numberWithCommas(userPooledUsdc)}</span>
           </div>
           <div class="data-row">
             <div class="label">
@@ -454,7 +454,7 @@
             <div class="label">
               Net PnL
             </div>
-            <span class='neg'>${numberWithCommas(usdcPnl)}</span>
+            <span class:neg={usdcPnl < 0} class:pos={usdcPnl > 0}>${numberWithCommas(usdcPnl)}</span>
           </div>
         </div>
         <div class="stats">
@@ -549,7 +549,7 @@
             <div class="label">
               Current Share
             </div>
-            <span class='yellow'>${numberWithCommas(userPooledTotal)}</span>
+            <span class='white'>${numberWithCommas(userPooledTotal)}</span>
           </div>
           <div class="data-row">
             <div class="label">
@@ -561,7 +561,7 @@
             <div class="label">
               Net PnL
             </div>
-            <span class='neg'>${numberWithCommas(totalPnl)}</span>
+            <span class:neg={totalPnl < 0} class:pos={totalPnl > 0}>${numberWithCommas(totalPnl)}</span>
           </div>
         </div>
       </div>
