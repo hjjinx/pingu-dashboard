@@ -19,6 +19,7 @@
   let positions: any[] = []
   let orders: any[] = []
   let history: any[] = []
+  let tradingHistory: any[] = []
   let userStats: any;
   let unclaimedRewards: any;
   let grossPnlEth = 0;
@@ -161,7 +162,8 @@
       usdcPnl = Number((Number(poolUsdcWithdrawn) + Number(userPooledUsdc) - Number(poolUsdcDeposited) - Number(poolUsdcTaxPaid)).toFixed(2))
       totalPnl = Number((Number(totalWithdrawn) + Number(userPooledTotal) - Number(totalDeposited) - Number(totalTaxPaid)).toFixed(2))
     }
-    for (let row of history) {
+    tradingHistory = history.filter((r) => r.type == 'Position Decreased' || r.type == 'Position Increased' || r.type == 'Position Liquidated')
+    for (let row of tradingHistory) {
       if (row.blockTimestamp > lastTradeDate!) lastTradeDate = row.blockTimestamp
       if (row.blockTimestamp < firstTradeDate!) firstTradeDate = row.blockTimestamp
     }
@@ -180,6 +182,7 @@
     uplEth = Number(uplEth.toFixed(3))
     uplUsdc = Number(uplUsdc.toFixed(1))
     totalUPL = Number(totalUPL.toFixed(1))
+
     loading = false
   })
 
@@ -566,7 +569,7 @@
         </div>
       </div>
       {#if volumeTotal > 1000}
-        <Line data={history}/>
+        <Line data={tradingHistory}/>
       {/if}
       <div class=history-container>
         <div class='account-nav'>
