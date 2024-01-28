@@ -180,7 +180,7 @@
           <div class="column column-margin" title={`${(position.marginInDollars).toString()}$`}>
             {numberWithCommas(
               priceFormatter(position.margin, position.asset)
-            )}{position.type.includes('Pingu') ? '' : ( position.asset == ETH ? 'Ξ' : '$')}
+            )}{position.type?.includes('Pingu') ? '' : ( position.asset == ETH ? 'Ξ' : '$')}
           </div>
           <div class="column column-size" title={`${(position.sizeInDollars).toString()}$`}>
             {#if position.market !== '-'}
