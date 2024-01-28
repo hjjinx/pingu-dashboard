@@ -163,13 +163,15 @@
           }}
         >
           <div class="column column-product">
-            {#if position.isLong}<span class="pos">↑</span>{:else}<span
-                class="neg">↓</span
-              >{/if}
+            {#if position.market !== '-'}
+              {#if position.isLong}<span class="pos">↑</span>{:else}<span
+                  class="neg">↓</span
+                >{/if}
+            {/if}
             {position.market}
           </div>
           <div class="column column-price" title={(position.price / getPriceDenominator(position.asset)).toString()}>
-            {#if position.orderType == 0}
+            {#if position.orderType == 0 || position.market == '-'}
              -
             {:else}
               {numberWithCommas(priceFormatter(position.price))}$
@@ -178,13 +180,17 @@
           <div class="column column-margin" title={`${(position.marginInDollars).toString()}$`}>
             {numberWithCommas(
               priceFormatter(position.margin, position.asset)
-            )}{position.asset == ETH ? 'Ξ' : '$'}
+            )}{position.type.includes('Pingu') ? '' : ( position.asset == ETH ? 'Ξ' : '$')}
           </div>
           <div class="column column-size" title={`${(position.sizeInDollars).toString()}$`}>
-            {priceFormatter(
-              position.size,
-              position.asset
-            )}{position.asset == ETH ? 'Ξ' : '$'}
+            {#if position.market !== '-'}
+              {priceFormatter(
+                position.size,
+                position.asset
+              )}{position.asset == ETH ? 'Ξ' : '$'}
+            {:else}
+                -
+            {/if}
           </div>
           {#if dataType == 'positions'}
             <div class="column column-leverage">

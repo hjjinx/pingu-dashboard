@@ -76,7 +76,13 @@ export const addDollarInfoToData = (_positions: any[], prices: any[]) => {
   for (const position of _positions) {
     const newPos = {...position}
     newPos.leverage = newPos.size / newPos.margin;
-    newPos.markPrice = prices[newPos.market][0];
+    if (newPos.market !== '-') {
+      newPos.markPrice = prices[newPos.market][0]
+    };
+    if (newPos.asset != ETH && newPos.asset != USDC) {
+      newPos.asset = ETH;
+    }
+    newPos.asset = ETH;
     newPos.marginInDollars =
       newPos.asset == ETH
         ? (newPos.margin * prices["ETH-USD"][0]) / getPriceDenominator(ETH)
