@@ -82,7 +82,6 @@ export const addDollarInfoToData = (_positions: any[], prices: any[]) => {
     if (newPos.asset != ETH && newPos.asset != USDC) {
       newPos.asset = ETH;
     }
-    newPos.asset = ETH;
     newPos.marginInDollars =
       newPos.asset == ETH
         ? (newPos.margin * prices["ETH-USD"][0]) / getPriceDenominator(ETH)
