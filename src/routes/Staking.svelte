@@ -2,12 +2,12 @@
 <script lang='ts'>
   import { onMount } from "svelte";
   import { prices } from "../scripts/stores";
-  import { numberWithCommas } from "../scripts/utils";
-  import { getRewards, getStakingFeeShare, getTotalPinguStaked } from "../scripts/web3";
+  import { getPriceDenominator, numberWithCommas } from "../scripts/utils";
+  import { getRewards, getStakingFeeShare, getTotalPinguStaked, getUnclaimedStakingRewards } from "../scripts/web3";
   import { SPINNER_ICON } from "../scripts/icons";
-  import { ETH_PRICE_DENOMINATOR, USDC_PRICE_DENOMINATOR } from "../scripts/constants";
+  import { ETH, ETH_PRICE_DENOMINATOR, USDC, USDC_PRICE_DENOMINATOR } from "../scripts/constants";
 
-  let data: any[] = [];
+  $: data = [] as any;
   let loading: boolean;
   let sortBy: string = 'pinguStaked';
   let sortOrder = 'desc';
@@ -43,6 +43,19 @@
       }
     }
   };
+
+  const fetchUnclaimedRewards = async (e: any, user: any, index: number) => {
+    e.stopPropagation();
+    let {eth, usdc} = await getUnclaimedStakingRewards(user.id)
+    eth = Number(((eth / getPriceDenominator(ETH))).toFixed(3))
+    usdc = Number((usdc / getPriceDenominator(USDC)).toFixed(1))
+    const total = eth * $prices['ETH-USD'][0] + usdc;
+    user.ethUnclaimed = eth;
+    user.usdcUnclaimed = usdc;
+    user.totalUnclaimed = Number(total.toFixed(2));
+    user.netEarnings = Number((user.totalClaimed + user.totalUnclaimed).toFixed(2));
+    data[index] = user;
+  }
 </script>
 
 {#if loading || !data.length}
@@ -68,12 +81,12 @@
           >{sortBy == 'id' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
         >
         </div>
-        <div class="column column-claimed" on:click={() => changeSort('stakingRevenueEth')}>
+        <div class="column column-claimed can-compress" on:click={() => changeSort('stakingRevenueEth')}>
           ETH Claimed <span class={sortOrder == 'asc' ? 'pos' : 'neg'}
           >{sortBy == 'stakingRevenueEth' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
         >
         </div>
-        <div class="column column-claimed" on:click={() => changeSort('stakingRevenueUsdc')}>
+        <div class="column column-claimed can-compress" on:click={() => changeSort('stakingRevenueUsdc')}>
           USDC Claimed <span class={sortOrder == 'asc' ? 'pos' : 'neg'}
           >{sortBy == 'stakingRevenueUsdc' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
         >
@@ -81,6 +94,16 @@
         <div class="column column-claimed" on:click={() => changeSort('totalClaimed')}>
           Total Claimed <span class={sortOrder == 'asc' ? 'pos' : 'neg'}
           >{sortBy == 'totalClaimed' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
+        >
+        </div>
+        <div class="column column-claimed" on:click={() => changeSort('totalUnclaimed')}>
+          Total Unclaimed <span class={sortOrder == 'asc' ? 'pos' : 'neg'}
+          >{sortBy == 'totalUnclaimed' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
+        >
+        </div>
+        <div class="column column-claimed" on:click={() => changeSort('netEarnings')}>
+          Net Earnings <span class={sortOrder == 'asc' ? 'pos' : 'neg'}
+          >{sortBy == 'netEarnings' ? (sortOrder == 'asc' ? '↑' : '↓') : ''}</span
         >
         </div>
         <div class="column column-claimed" on:click={() => changeSort('pinguStaked')}>
@@ -95,7 +118,7 @@
       {#if data?.length == 0}
         <div class="empty">No trades to show.</div>
       {:else}
-        {#each data as user}
+        {#each data as user, index}
           <div
             class="trade"
             data-intercept="true"
@@ -104,14 +127,28 @@
             <div class="column column-product" title={user.id}>
               {user.id.substr(0, 5) + '...' + user.id.substr(39)}
             </div>
-            <div class="column column-claimed">
+            <div class="column column-claimed can-compress">
               Ξ{numberWithCommas(user.stakingRevenueEth)}
             </div>
-            <div class="column column-claimed">
+            <div class="column column-claimed can-compress">
               ${numberWithCommas(user.stakingRevenueUsdc)}
             </div>
             <div class="column column-claimed">
               ${numberWithCommas(user.totalClaimed)}
+            </div>
+            <div class="column column-claimed">
+              {#if user.totalUnclaimed}
+                ${numberWithCommas(user.totalUnclaimed)}
+              {:else}
+                <span class="button" on:click={(e) => fetchUnclaimedRewards(e, user, index)}>Click to fetch</span>
+              {/if}
+            </div>
+            <div class="column column-claimed">
+              {#if user.netEarnings}
+                ${numberWithCommas(user.netEarnings)}
+              {:else}
+                <span class="button" on:click={(e) => fetchUnclaimedRewards(e, user, index)}>Click to fetch</span>
+              {/if}
             </div>
             <div class="column column-claimed pos">
               {numberWithCommas(user.pinguStaked)}
@@ -174,6 +211,12 @@
   .column-claimed {
     width: 20%;
   }
+  .column-claimed .button {
+    border: 3px solid var(--primary);
+    border-radius: 10px;
+    padding: 5px;
+    cursor: crosshair;
+  }
   .top-bar {
     padding: 10px;
   }
@@ -185,7 +228,7 @@
   }
   .inline-input {
     background: var(--eerie-black);
-    color: var(--green);
+    color: var(--primary);
     outline: none;
     border: none;
     max-width: fit-content;
@@ -206,6 +249,12 @@
     /* Custom styles for the arrows */
     opacity: 1;
     height: auto;
-    background-color: var(--green);
+    background-color: var(--primary);
+  }
+
+  @media (max-width: 1000px) {
+    .can-compress {
+      display: none;
+    }
   }
 </style>
