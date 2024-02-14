@@ -12,6 +12,7 @@
   import milady_5 from '../../../images/milady5.png';
   import chud_1 from '../../../images/chud1.jpg';
   import remilio1 from '../../../images/remilio.png';
+  import saylor from '../../../images/saylor.png';
   import Logo from "../../../images/logo.png";
 
   export let data: any;
@@ -83,6 +84,9 @@
       <div class='bg-selection-container' on:click={() => changeBackground(remilio1)}>
         <img src={remilio1} class='bg' alt='remilio1'/>
       </div>
+      <div class='bg-selection-container' on:click={() => changeBackground(saylor)}>
+        <img src={saylor} class='bg' alt='remilio1'/>
+      </div>
     </div>
     <div id="canvas">
       <div class="container" id="canvas-content">
@@ -152,6 +156,11 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;  
   }
   #canvas {
     width: 948px;
