@@ -111,7 +111,7 @@
 		--secondary-darkest: #121212;
   }
   :global(.pos) {
-    color: var(--green);
+    color: var(--primary);
   }
   :global(.neg) {
     color: var(--red);

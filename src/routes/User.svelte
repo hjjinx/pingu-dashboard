@@ -243,7 +243,7 @@
           </div>
         {/if}
       <div class='last-trade-info'>
-        Has Staked <span class='green'>{pinguStaked} Pingu</span>
+        Has Staked <span class='pos'>{pinguStaked} Pingu</span>
       </div>
       <div class='stats-container'>
         <div class="stats">
