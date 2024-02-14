@@ -90,6 +90,7 @@
           <img src={chud_1} class='bg' alt='' id='banner-bg'/>
         </div>
         <div class="logo">
+          <!-- svelte-ignore a11y-missing-attribute -->
           <img src={Logo}/>
           <span class="logo-text">pingu.exchange</span>
         </div>
@@ -120,7 +121,7 @@
               </div>
               <div style="margin-left: 1.5em">
                 <div class="price-heading">Mark Price</div>
-                <div class="price">{numberWithCommas($prices[data.market][0].toFixed(2))}</div>
+                <div class="price">{numberWithCommas((Number($prices[data.market][0])).toFixed(2))}</div>
               </div>
             {/if}
           </div>
@@ -130,7 +131,7 @@
             <p class="ref-p">
               Trade opened by <span class="address">{data.user}</span>
             </p>
-            <p class="ref-p">Join CAP Protocol & make greater fortune!</p>
+            <p class="ref-p">Join Pingu & make greater fortune!</p>
           </div>
         </div>
       </div>
@@ -211,7 +212,11 @@
   .logo {
     display: flex;
     flex-direction: row;
-    height: 50px;
+    height: 40px;
+  }
+  .logo img {
+    width: 60px;
+    height: 60px;
   }
   .logo-text {
     margin-left: 20px;

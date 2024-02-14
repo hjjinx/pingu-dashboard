@@ -98,11 +98,11 @@
 
 		/* Brand */
 
-		--primary: rgba(50,209,53,1.00);
-		--primary-highlighted: rgba(50,209,53,0.1);
-		--primary-active: rgba(50,209,53,0.75);
-		--primary-hover: rgba(50,209,53,0.94);
-		--primary-darkest: #121212;
+		--primary: #066cff;
+    --primary-highlighted: #066cff;
+    --primary-active: #0843c5;
+    --primary-hover: #0d3d9b;
+		--primary-darkest: #ffffff;
 
 		--secondary: rgba(248,76,32,1.00);
 		--secondary-highlighted: rgba(248,76,32,0.1);

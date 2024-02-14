@@ -43,7 +43,7 @@
   }
 
   a {
-    color: var(--green);
+    color: var(--primary);
     display: flex;
     align-items: center;
     text-align: center;
