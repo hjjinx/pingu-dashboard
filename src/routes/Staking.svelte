@@ -137,14 +137,14 @@
               ${numberWithCommas(user.totalClaimed)}
             </div>
             <div class="column column-claimed">
-              {#if user.totalUnclaimed}
+              {#if user.totalUnclaimed != undefined}
                 ${numberWithCommas(user.totalUnclaimed)}
               {:else}
                 <span class="button" on:click={(e) => fetchUnclaimedRewards(e, user, index)}>Click to fetch</span>
               {/if}
             </div>
             <div class="column column-claimed">
-              {#if user.netEarnings}
+              {#if user.netEarnings != undefined}
                 ${numberWithCommas(user.netEarnings)}
               {:else}
                 <span class="button" on:click={(e) => fetchUnclaimedRewards(e, user, index)}>Click to fetch</span>
