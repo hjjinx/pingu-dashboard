@@ -51,6 +51,7 @@ export const BASE_FEES_BPS = {
 	'MANTA-USD': 50,
 	"JUP-USD": 50,
 	"DYM-USD": 50,
+	"PYTH-USD": 50,
 };
 
 export const startTimestamp = 1672943400000
