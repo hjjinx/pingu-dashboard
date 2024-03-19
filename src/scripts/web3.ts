@@ -19,7 +19,7 @@ const PositionStoreContract = new web3.eth.Contract(PositionStoreABI, PositionSt
 const OrderStoreContractAdd = '0xc13d6d62cad4b80db29a188ac179a4735a0e8fa1';
 const OrderStoreContract = new web3.eth.Contract(OrderStoreABI, OrderStoreContractAdd);
 
-const StakingContractAdd = '0x219b7c8de64d6241e2d579d7dacda6ebe8afe86a';
+const StakingContractAdd = '0x58ef2523939daf10385c6f3ccf921500c3f4f3f3';
 const StakingContract = new web3.eth.Contract(StakingABI, StakingContractAdd);
 
 const StakingStoreContractAdd = '0x91f24d2dc94b07954042b0e366b400ea527febf4';
@@ -28,7 +28,7 @@ const StakingStoreContract = new web3.eth.Contract(StakingStoreABI, StakingStore
 const PoolStoreContractAdd = '0xe270e23dc782072de5c75744e0dcfb75372f2791';
 const PoolStoreContract = new web3.eth.Contract(PoolStoreABI, PoolStoreContractAdd);
 
-const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.1.0'
+const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.1.1'
 // const GRAPH = `https://gateway-arbitrum.network.thegraph.com/api/${PUBLIC_GRAPH_KEY}/subgraphs/id/ASonuQLUtjM7UPVyjGh5erZtBByBY2UDFiTBUnoUpmU4`
 
 export const getPositions = async () => {
