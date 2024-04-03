@@ -53,6 +53,7 @@ export const BASE_FEES_BPS = {
 	"DYM-USD": 50,
 	"PYTH-USD": 50,
 	"WIF-USD": 50,
+	'W-USD': 50,
 };
 
 export const startTimestamp = 1672943400000
