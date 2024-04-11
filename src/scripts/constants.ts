@@ -55,6 +55,8 @@ export const BASE_FEES_BPS = {
 	"WIF-USD": 50,
 	'W-USD': 50,
 	"ENA-USD": 50,
+	"SHIB-USD": 20,
+	"BONK-USD": 20,
 };
 
 export const startTimestamp = 1672943400000
