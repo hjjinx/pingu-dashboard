@@ -22,7 +22,7 @@ const OrderStoreContract = new web3.eth.Contract(OrderStoreABI, OrderStoreContra
 const StakingContractAdd = '0x58ef2523939daf10385c6f3ccf921500c3f4f3f3';
 const StakingContract = new web3.eth.Contract(StakingABI, StakingContractAdd);
 
-const StakingStoreContractAdd = '0x91f24d2dc94b07954042b0e366b400ea527febf4';
+const StakingStoreContractAdd = '0xeAfcE3872e04F8dfb391F6b51f30B3419c6Ede3C';
 const StakingStoreContract = new web3.eth.Contract(StakingStoreABI, StakingStoreContractAdd);
 
 const PoolStoreContractAdd = '0xe270e23dc782072de5c75744e0dcfb75372f2791';
