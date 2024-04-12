@@ -57,6 +57,7 @@ export const BASE_FEES_BPS = {
 	"ENA-USD": 50,
 	"SHIB-USD": 20,
 	"BONK-USD": 20,
+	"ETH-BTC": 20,
 };
 
 export const startTimestamp = 1672943400000
