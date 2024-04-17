@@ -58,6 +58,8 @@ export const BASE_FEES_BPS = {
 	"SHIB-USD": 20,
 	"BONK-USD": 20,
 	"ETH-BTC": 20,
+	"PRCL-USD": 20,
+	"MEME-USD": 20,
 };
 
 export const startTimestamp = 1672943400000
