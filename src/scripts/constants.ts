@@ -60,6 +60,7 @@ export const BASE_FEES_BPS = {
 	"ETH-BTC": 20,
 	"PRCL-USD": 20,
 	"MEME-USD": 20,
+	"GMX-USD": 20,
 };
 
 export const startTimestamp = 1672943400000
