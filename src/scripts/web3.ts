@@ -19,16 +19,16 @@ const PositionStoreContract = new web3.eth.Contract(PositionStoreABI, PositionSt
 const OrderStoreContractAdd = '0xc13d6d62cad4b80db29a188ac179a4735a0e8fa1';
 const OrderStoreContract = new web3.eth.Contract(OrderStoreABI, OrderStoreContractAdd);
 
-const StakingContractAdd = '0x58ef2523939daf10385c6f3ccf921500c3f4f3f3';
+const StakingContractAdd = '0xAb46ba93dC6b76d09680a942dD86Ba18DCc9Ab2f';
 const StakingContract = new web3.eth.Contract(StakingABI, StakingContractAdd);
 
-const StakingStoreContractAdd = '0xeAfcE3872e04F8dfb391F6b51f30B3419c6Ede3C';
+const StakingStoreContractAdd = '0x083442b5D575C920b91158DCe08a136e03FCE8cE';
 const StakingStoreContract = new web3.eth.Contract(StakingStoreABI, StakingStoreContractAdd);
 
 const PoolStoreContractAdd = '0xe270e23dc782072de5c75744e0dcfb75372f2791';
 const PoolStoreContract = new web3.eth.Contract(PoolStoreABI, PoolStoreContractAdd);
 
-const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.1.1'
+const GRAPH = 'https://api.studio.thegraph.com/query/43986/pingu-sg/0.1.2'
 // const GRAPH = `https://gateway-arbitrum.network.thegraph.com/api/${PUBLIC_GRAPH_KEY}/subgraphs/id/ASonuQLUtjM7UPVyjGh5erZtBByBY2UDFiTBUnoUpmU4`
 
 export const getPositions = async () => {
