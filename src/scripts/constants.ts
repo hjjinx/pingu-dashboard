@@ -61,6 +61,9 @@ export const BASE_FEES_BPS = {
 	"PRCL-USD": 20,
 	"MEME-USD": 20,
 	"GMX-USD": 20,
+	"LDO-USD": 20,
+	"BLAST-USD": 20,
+	"POL-USD": 20,
 };
 
 export const startTimestamp = 1672943400000
