@@ -64,6 +64,7 @@ export const BASE_FEES_BPS = {
 	"LDO-USD": 20,
 	"BLAST-USD": 20,
 	"POL-USD": 20,
+	"HYPE-USD": 20,
 };
 
 export const startTimestamp = 1672943400000
