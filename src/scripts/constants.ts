@@ -65,6 +65,17 @@ export const BASE_FEES_BPS = {
 	"BLAST-USD": 20,
 	"POL-USD": 20,
 	"HYPE-USD": 20,
+	"VIRTUAL-USD": 20,
+	"TAO-USD": 20,
+	"ETHFI-USD": 20,
+	"G-USD": 20,
+	"MOG-USD": 20,
+	"ONDO-USD": 20,
+	"RENDER-USD": 20,
+	"STRK-USD": 20,
+	"TAIKO-USD": 20,
+	"ZK-USD": 20,
+	"ZRO-USD": 20,
 };
 
 export const startTimestamp = 1672943400000
